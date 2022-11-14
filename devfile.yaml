@@ -1,30 +1,40 @@
-schemaVersion: 2.0.0
+schemaVersion: 2.1.0
 metadata:
   name: pacman
-  version: 2.0.0
-  alpha.build-dockerfile: "https://raw.githubusercontent.com/odo-devfiles/registry/master/devfiles/nodejs/build/Dockerfile"
-  alpha.deployment-manifest: "https://raw.githubusercontent.com/odo-devfiles/registry/master/devfiles/nodejs/deploy/deployment-manifest.yaml"
+  version: 2.1.0
+  displayName: Node.js Runtime
+  description: Stack with Node.js 16
+  icon: https://nodejs.org/static/images/logos/nodejs-new-pantone-black.svg
+  tags:
+    - Node.js
+    - Express
+    - ubi8
+  projectType: Node.js
+  language: JavaScript
 starterProjects:
-  - name: pacman
+  - name: nodejs-starter
     git:
       remotes:
-        origin: "https://github.com/ralvares/pacman.git"
+        origin: 'https://github.com/ralvares/pacman.git'
 components:
   - name: runtime
     container:
-      image: registry.access.redhat.com/ubi8/nodejs-14:latest
+      image: registry.access.redhat.com/ubi8/nodejs-16:latest
+      args: ['tail', '-f', '/dev/null']
       memoryLimit: 1024Mi
       mountSources: true
-      sourceMapping: /project
       endpoints:
-        - name: http-8080
-          targetPort: 8080
+        - name: http-node
+          targetPort: 3000
+        - exposure: none
+          name: debug
+          targetPort: 5858
 commands:
   - id: install
     exec:
       component: runtime
       commandLine: npm install
-      workingDir: /project
+      workingDir: ${PROJECT_SOURCE}
       group:
         kind: build
         isDefault: true
@@ -32,7 +42,7 @@ commands:
     exec:
       component: runtime
       commandLine: npm start
-      workingDir: /project
+      workingDir: ${PROJECT_SOURCE}
       group:
         kind: run
         isDefault: true
@@ -40,7 +50,7 @@ commands:
     exec:
       component: runtime
       commandLine: npm run debug
-      workingDir: /project
+      workingDir: ${PROJECT_SOURCE}
       group:
         kind: debug
         isDefault: true
@@ -48,7 +58,7 @@ commands:
     exec:
       component: runtime
       commandLine: npm test
-      workingDir: /project
+      workingDir: ${PROJECT_SOURCE}
       group:
         kind: test
         isDefault: true
