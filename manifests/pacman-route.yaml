@@ -8,4 +8,4 @@ spec:
   path: "/"
   to:
     kind: Service
-    name: pacman
+    name: pacmam
