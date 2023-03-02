@@ -17,6 +17,11 @@ spec:
       containers:
       - image: quay.io/ralvares/pacman:v1
         name: pacman
+        env:
+          - name: MONGO_SERVICE_HOST
+            value: "mongo"
+          - name: MONGO_SERVICE_PORT
+            value: "27017"
         ports:
         - containerPort: 8080
           name: http-server
