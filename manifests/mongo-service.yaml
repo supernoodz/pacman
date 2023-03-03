@@ -4,6 +4,7 @@ metadata:
   labels:
     name: mongo
   name: mongo
+  namespace: pacman
 spec:
   type: ClusterIP
   ports:
